@@ -19,29 +19,33 @@
         <div class='full-width-split__one'>
             <div class='full-width-split__inner'>
                 <h2 class='headline headline--small-plus t-center'>Upcoming Events</h2>
+                <?php
+				$homepageEvent = new WP_Query(
+					array(
+						'post_type'      => 'event',
+						'posts_per_page' => 2,
+						'orderby'        => 'date',
+						'order'          => 'DESC',
 
-                <!--            --><?php
-				$homepageEvent = new WP_Query( array(
-					'post_type'      => 'event',
-					'posts_per_page' => 2,
-					'order'          => 'ASC'
-
-				) );
+					)
+				);
 				if ( $homepageEvent->have_posts() ) {
 					while ( $homepageEvent->have_posts() ) {
-						$homepageEvent->the_post(); ?>
+						$homepageEvent->the_post();
+						?>
                         <div class='event-summary'>
                             <a class='event-summary__date t-center' href='#'>
                                 <span class='event-summary__month'><?php the_time( 'M' ) ?></span>
                                 <span class='event-summary__day'><?php the_time( 'd' ) ?></span>
                             </a>
                             <div class='event-summary__content'>
-                                <h5 class='event-summary__title headline headline--tiny'><a href='<?php the_permalink(); ?>'><?php the_title(); ?></a></h5>
+                                <h5 class='event-summary__title headline headline--tiny'><a href='<?php the_permalink(); ?>'><?php the_title();
+										?></a></h5>
                                 <p><?php if ( has_excerpt() ) {
 										echo get_the_excerpt();
 									} else {
-										echo wp_trim_words(get_the_content(), 15);
-										//echo "hello";
+										echo wp_trim_words( get_the_content(), 15 );
+										//echo 'hello';
 									}
 									?><a href='<?php the_permalink(); ?>' class='nu gray'> Learn more</a></p>
 
@@ -61,11 +65,13 @@
                 <h2 class='headline headline--small-plus t-center'>From Our Blogs</h2>
 
 				<?php
-				$custom_Post_Homepage = new WP_Query( array(
-					'post_type'      => 'post',
-					'posts_per_page' => 2,
-					'order'          => 'ASC'
-				) );
+				$custom_Post_Homepage = new WP_Query(
+					array(
+						'post_type'      => 'post',
+						'posts_per_page' => 2,
+						'order'          => 'desc'
+					)
+				);
 				// echo '<pre>';
 				// print_r( $custom_Post_Homepage );
 				while ( $custom_Post_Homepage->have_posts() ) {
@@ -82,8 +88,8 @@
                             <p><?php if ( has_excerpt() ) {
 									echo get_the_excerpt();
 								} else {
-									echo wp_trim_words(get_the_content(), 15);
-									//echo "hello";
+									echo wp_trim_words( get_the_content(), 15 );
+									//echo 'hello';
 								}
 								?><a href='<?php the_permalink(); ?>' class='nu gray'>Read more</a></p>
                         </div>
@@ -93,7 +99,8 @@
 				}
 				wp_reset_postdata();
 				?>
-                <p class='t-center no-margin'><a href="<?php echo site_url( '/blog' ) ?>" class='btn btn--yellow'>View All Blog
+                <p class='t-center no-margin'><a href="<?php echo site_url( '/blog' ) ?>" class='btn btn--yellow'>View All
+                        Blog
                         Posts</a></p>
             </div>
         </div>
