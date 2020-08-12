@@ -19,14 +19,23 @@
         <div class='full-width-split__one'>
             <div class='full-width-split__inner'>
                 <h2 class='headline headline--small-plus t-center'>Upcoming Events</h2>
-                <?php
+				<?php
+                $today=date('Ymd');
 				$homepageEvent = new WP_Query(
 					array(
 						'post_type'      => 'event',
-						'posts_per_page' => 2,
-						'orderby'        => 'date',
-						'order'          => 'DESC',
-
+						'posts_per_page' => 4,
+						'meta_key'  =>'event_date',
+						'orderby'        => 'event_date',
+						'order'          => 'ASC',
+						'meta_query'     => array(
+							array(
+								'key'     => 'event_date',
+								'compare' => '>=',
+								'type'    => 'numeric',
+                                'value'=>$today
+							)
+						)
 					)
 				);
 				if ( $homepageEvent->have_posts() ) {
@@ -35,8 +44,12 @@
 						?>
                         <div class='event-summary'>
                             <a class='event-summary__date t-center' href='#'>
-                                <span class='event-summary__month'><?php the_time( 'M' ) ?></span>
-                                <span class='event-summary__day'><?php the_time( 'd' ) ?></span>
+                                <span class='event-summary__month'><?php
+	                                $Eventdate = new DateTime( get_field( 'event_date' ) );
+	                                echo $Eventdate->format( 'M' );
+	                                ?></span>
+                                <span class='event-summary__day'><?php $Eventdate = new DateTime( get_field( 'event_date' ) );
+									echo $Eventdate->format( 'd' ); ?></span>
                             </a>
                             <div class='event-summary__content'>
                                 <h5 class='event-summary__title headline headline--tiny'><a href='<?php the_permalink(); ?>'><?php the_title();
@@ -52,23 +65,20 @@
                             </div>
                         </div>
 					<?php }
-
 				}
 				wp_reset_postdata();
 				?>
-                <p class='t-center no-margin'><a href='#' class='btn btn--blue'>View All Events</a></p>
-
+                <p class='t-center no-margin'><a href="<?php echo site_url( '/events' ) ?>" class='btn btn--blue'>View All Events</a></p>
             </div>
         </div>
         <div class='full-width-split__two'>
             <div class='full-width-split__inner'>
                 <h2 class='headline headline--small-plus t-center'>From Our Blogs</h2>
-
 				<?php
 				$custom_Post_Homepage = new WP_Query(
 					array(
 						'post_type'      => 'post',
-						'posts_per_page' => 2,
+						'posts_per_page' => 4,
 						'order'          => 'desc'
 					)
 				);
@@ -94,14 +104,11 @@
 								?><a href='<?php the_permalink(); ?>' class='nu gray'>Read more</a></p>
                         </div>
                     </div>
-
 					<?php
 				}
 				wp_reset_postdata();
 				?>
-                <p class='t-center no-margin'><a href="<?php echo site_url( '/blog' ) ?>" class='btn btn--yellow'>View All
-                        Blog
-                        Posts</a></p>
+                <p class='t-center no-margin'><a href="<?php echo site_url( '/blog' ) ?>" class='btn btn--yellow'>View All Blog Posts</a></p>
             </div>
         </div>
     </div>
