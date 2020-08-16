@@ -2,8 +2,7 @@
 ?>
 
     <div class='page-banner'>
-        <div class='page-banner__bg-image'
-             style="background-image: url(<?php echo get_theme_file_uri( '/inc/images/library-hero.jpg' ) ?>);"></div>
+        <div class='page-banner__bg-image' style="background-image: url(<?php echo get_theme_file_uri('/inc/images/library-hero.jpg') ?>);"></div>
         <div class='page-banner__content container t-center c-white'>
             <h1 class='headline headline--large'>Welcome!</h1>
             <h2 class='headline headline--medium'>We think you&rsquo;
@@ -19,96 +18,93 @@
         <div class='full-width-split__one'>
             <div class='full-width-split__inner'>
                 <h2 class='headline headline--small-plus t-center'>Upcoming Events</h2>
-				<?php
-                $today=date('Ymd');
-				$homepageEvent = new WP_Query(
-					array(
-						'post_type'      => 'event',
-						'posts_per_page' => 4,
-						'meta_key'  =>'event_date',
-						'orderby'        => 'event_date',
-						'order'          => 'ASC',
-						'meta_query'     => array(
-							array(
-								'key'     => 'event_date',
-								'compare' => '>=',
-								'type'    => 'numeric',
-                                'value'=>$today
-							)
-						)
-					)
-				);
-				if ( $homepageEvent->have_posts() ) {
-					while ( $homepageEvent->have_posts() ) {
-						$homepageEvent->the_post();
-						?>
+                <?php
+                $today = date( 'ymd' );
+                $homepageEvent = new WP_Query(
+                    array(
+                        'post_type' => 'event',
+                        'posts_per_page' => 4,
+                        'meta_key' => 'event_date',
+                        'orderby' => 'meta_value_num',
+                        'order' => 'ASC',
+                        'meta_query' => array(
+                            array(
+                                'key' => 'event_date',
+                                'value' => $today,
+                                'compare' => '>',
+                                'type' => 'DATE'
+                            )
+                        )
+                    )
+                );
+                if ($homepageEvent->have_posts()) {
+                    while ($homepageEvent->have_posts()) {
+                        $homepageEvent->the_post();
+                        ?>
                         <div class='event-summary'>
                             <a class='event-summary__date t-center' href='#'>
-                                <span class='event-summary__month'><?php
-	                                $Eventdate = new DateTime( get_field( 'event_date' ) );
-	                                echo $Eventdate->format( 'M' );
-	                                ?></span>
+                            <span class='event-summary__month'><?php
+                                $Eventdate = new DateTime(get_field('event_date'));
+                                echo $Eventdate->format('M');
+                                ?></span>
                                 <span class='event-summary__day'><?php $Eventdate = new DateTime( get_field( 'event_date' ) );
-									echo $Eventdate->format( 'd' ); ?></span>
+                                    echo $Eventdate->format('d'); ?></span>
                             </a>
                             <div class='event-summary__content'>
                                 <h5 class='event-summary__title headline headline--tiny'><a href='<?php the_permalink(); ?>'><?php the_title();
-										?></a></h5>
-                                <p><?php if ( has_excerpt() ) {
-										echo get_the_excerpt();
-									} else {
-										echo wp_trim_words( get_the_content(), 15 );
-										//echo 'hello';
-									}
-									?><a href='<?php the_permalink(); ?>' class='nu gray'> Learn more</a></p>
-
+                                        ?></a></h5>
+                                <p><?php if (has_excerpt()) {
+                                        echo get_the_excerpt();
+                                    } else {
+                                        echo wp_trim_words(get_the_content(), 15);
+                                    }
+                                    ?><a href='<?php the_permalink(); ?>' class='nu gray'> Learn more</a></p>
                             </div>
                         </div>
-					<?php }
-				}
-				wp_reset_postdata();
-				?>
-                <p class='t-center no-margin'><a href="<?php echo site_url( '/events' ) ?>" class='btn btn--blue'>View All Events</a></p>
+                    <?php }
+                }
+                wp_reset_postdata();
+                ?>
+                <p class='t-center no-margin'><a href="<?php echo site_url('/events') ?>" class='btn btn--blue'>View All Events</a></p>
             </div>
         </div>
         <div class='full-width-split__two'>
             <div class='full-width-split__inner'>
                 <h2 class='headline headline--small-plus t-center'>From Our Blogs</h2>
-				<?php
-				$custom_Post_Homepage = new WP_Query(
-					array(
-						'post_type'      => 'post',
-						'posts_per_page' => 4,
-						'order'          => 'desc'
-					)
-				);
-				// echo '<pre>';
-				// print_r( $custom_Post_Homepage );
-				while ( $custom_Post_Homepage->have_posts() ) {
-					$custom_Post_Homepage->the_post();
-					?>
+                <?php
+                $custom_Post_Homepage = new WP_Query(
+                    array(
+                        'post_type' => 'post',
+                        'posts_per_page' => 4,
+                        'order' => 'desc',
+                    )
+                );
+                // echo '<pre>';
+                // print_r( $custom_Post_Homepage );
+                while ($custom_Post_Homepage->have_posts()) {
+                    $custom_Post_Homepage->the_post();
+                    ?>
                     <div class='event-summary'>
                         <a class='event-summary__date event-summary__date--beige t-center' href='<?php the_permalink(); ?>'>
-                            <span class='event-summary__month'><?php the_time( 'M' ) ?></span>
-                            <span class='event-summary__day'><?php the_time( 'd' ) ?></span>
+                            <span class='event-summary__month'><?php the_time('M') ?></span>
+                            <span class='event-summary__day'><?php the_time('d') ?></span>
                         </a>
                         <div class='event-summary__content'>
-                            <h5 class='event-summary__title headline headline--tiny'><a
-                                        href='<?php the_permalink(); ?>'><?php the_title() ?></a></h5>
-                            <p><?php if ( has_excerpt() ) {
-									echo get_the_excerpt();
-								} else {
-									echo wp_trim_words( get_the_content(), 15 );
-									//echo 'hello';
-								}
-								?><a href='<?php the_permalink(); ?>' class='nu gray'>Read more</a></p>
+                            <h5 class='event-summary__title headline headline--tiny'><a href='<?php the_permalink(); ?>'><?php the_title() ?></a></h5>
+                            <p><?php if (has_excerpt()) {
+                                    echo get_the_excerpt();
+                                } else {
+                                    echo wp_trim_words(get_the_content(), 15);
+                                    //echo 'hello';
+                                }
+                                ?><a href='<?php the_permalink(); ?>' class='nu gray'>Read more</a></p>
                         </div>
                     </div>
-					<?php
-				}
-				wp_reset_postdata();
-				?>
-                <p class='t-center no-margin'><a href="<?php echo site_url( '/blog' ) ?>" class='btn btn--yellow'>View All Blog Posts</a></p>
+                    <?php
+                }
+                wp_reset_postdata();
+                ?>
+                <p class='t-center no-margin'><a href="<?php echo site_url('/blog') ?>" class='btn btn--yellow'>View All Blog Posts</a></p>
             </div>
         </div>
     </div>
@@ -116,8 +112,7 @@
     <div class='hero-slider'>
         <div data-glide-el='track' class='glide__track'>
             <div class='glide__slides'>
-                <div class='hero-slider__slide'
-                     style="background-image: url(<?php echo get_theme_file_uri( '/inc/images/bus.jpg' ); ?>);">
+                <div class='hero-slider__slide' style="background-image: url(<?php echo get_theme_file_uri('/inc/images/bus.jpg'); ?>);">
                     <div class='hero-slider__interior container'>
                         <div class='hero-slider__overlay'>
                             <h2 class='headline headline--medium t-center'>Free Transportation</h2>
@@ -126,8 +121,7 @@
                         </div>
                     </div>
                 </div>
-                <div class='hero-slider__slide'
-                     style="background-image: url(<?php echo get_theme_file_uri( '/inc/images/apples.jpg' ); ?>);">
+                <div class='hero-slider__slide' style="background-image: url(<?php echo get_theme_file_uri('/inc/images/apples.jpg'); ?>);">
                     <div class='hero-slider__interior container'>
                         <div class='hero-slider__overlay'>
                             <h2 class='headline headline--medium t-center'>An Apple a Day</h2>
@@ -136,8 +130,7 @@
                         </div>
                     </div>
                 </div>
-                <div class='hero-slider__slide'
-                     style="background-image: url(<?php echo get_theme_file_uri( '/inc/images/bread.jpg' ); ?>);">
+                <div class='hero-slider__slide' style="background-image: url(<?php echo get_theme_file_uri('/inc/images/bread.jpg'); ?>);">
                     <div class='hero-slider__interior container'>
                         <div class='hero-slider__overlay'>
                             <h2 class='headline headline--medium t-center'>Free Food</h2>
