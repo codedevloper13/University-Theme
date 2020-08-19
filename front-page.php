@@ -31,7 +31,7 @@
                             array(
                                 'key' => 'event_date',
                                 'value' => $today,
-                                'compare' => '>',
+                                'compare' => '>=',
                                 'type' => 'DATE'
                             )
                         )

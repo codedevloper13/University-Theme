@@ -16,8 +16,27 @@ get_header(); ?>
     <!--hello-->
     <div class="container container--narrow page-section">
         <?php
-        while (have_posts()) {
-            the_post(); ?>
+        $today = date('ymd');
+        $PastEvent = new WP_Query(
+            array(
+                'paged' => get_query_var('paged', 1),
+                'post_type' => 'event',
+                'posts_per_page' => 3,
+                'meta_key' => 'event_date',
+                'orderby' => 'meta_value_num',
+                'order' => 'ASC',
+                'meta_query' => array(
+                    array(
+                        'key' => 'event_date',
+                        'value' => $today,
+                        'compare' => '<',
+                        'type' => 'DATE'
+                    )
+                )
+            )
+        );
+        while ($PastEvent->have_posts()) {
+            $PastEvent->the_post(); ?>
             <div class='event-summary'>
                 <a class='event-summary__date t-center' href='#'>
                             <span class='event-summary__month'><?php
@@ -38,7 +57,9 @@ get_header(); ?>
         }
 
         ?>
-        <?php university_Paginations(); ?>
+        <?php echo paginate_links(array(
+            'total'=> $PastEvent->max_num_pages
+        )); ?>
     </div>
 
 <?php get_footer();
