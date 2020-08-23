@@ -1,13 +1,15 @@
 <?php get_header(); ?>
-
-
-<?php
+<ul class="link-list min-list">
+   <?php
 if (have_posts()) {
   while (have_posts()) {
     the_post(); ?>
+</ul>
 <div class="page-banner">
    <div class="page-banner__bg-image"
-      style="background-image: url(<?php echo get_theme_file_uri('/inc/images/ocean.jpg') ?>);"></div>
+      style="background-image: url(<?php echo get_theme_file_uri('/inc/images/ocean.jpg') ?>);">
+   </div>
+
    <div class="page-banner__content container container--narrow">
       <h1 class="page-banner__title"><?php the_title(); ?>
       </h1>
@@ -18,35 +20,27 @@ if (have_posts()) {
 </div>
 <div class="container container--narrow page-section">
    <div class="metabox metabox--position-up metabox--with-home-link">
-      <p><a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('event') ?>"><i
-               class="fa fa-home" aria-hidden="true"></i> Event Home</a>
-         <span class=" metabox__main"><?php echo get_the_title() ?></span></p>
+      <p>
+         <a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('program') ?>">
+            <i class="fa fa-home" aria-hidden="true"></i>
+            Program Home
+         </a>
+         <span class=" metabox__main">
+            <?php echo get_the_title() ?>
+         </span>
+      </p>
    </div>
 
    <div class="generic-content">
       <div class="hover6">
          <div class="hover07 column ">
-            <figure><?php the_post_thumbnail('medium-large') ?>
+            <figure>
+               <?php the_post_thumbnail('medium-large') ?>
             </figure>
          </div>
       </div>
       <p><?php the_content(); ?></p>
 
-      <div class="text-center">
-         <?php
-             $relatedPrograms = get_field('related_program');
-             if (!empty($relatedPrograms)) { ?>
-         <h4>Related Programs</h4>
-         <?php
-               foreach ($relatedPrograms as $programs) { ?>
-         <ul class="programs-lists">
-            <li>
-               <a href="<?php echo get_the_permalink($programs) ?>"><?php echo get_the_title($programs) ?></a>
-            </li>
-         </ul>
-         <?php }
-             } ?>
-      </div>
    </div>
 
    <?php
@@ -87,12 +81,11 @@ if (have_posts()) {
          </tbody>
       </table>
    </div>
-
-
 </div>
 
 <?php
   }
 }
 ?>
+
 <?php get_footer();

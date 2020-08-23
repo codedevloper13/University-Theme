@@ -18,11 +18,13 @@ add_action('wp_enqueue_scripts', 'university_files');
 
 function university_features()
 {
-    register_nav_menus(array(
-        'primary_menu' => __('Primary Menu', 'university'),
-        'footer_menu' => __('Footer Menu', 'university'),
-    ));
-    require_once get_template_directory() . '/class-wp-bootstrap-navwalker.php';
+    register_nav_menus(
+        array(
+            'primary_menu' => __('Primary Menu', 'university'),
+            'footer_menu' => __('Footer Menu', 'university'),
+        )
+    );
+    include_once get_template_directory() . '/class-wp-bootstrap-navwalker.php';
     add_theme_support('title-tag');
 }
 
@@ -34,45 +36,53 @@ add_action('after_setup_theme', 'university_features');
 
 function university_footer_sidebar()
 {
-    register_sidebar(array(
-        'name' => __('Footer 1', 'university'),
-        'id' => 'footer-1',
-        'description' => __('Widgets in this area will be shown on all posts and pages.', 'university'),
-        'before_widget' => '<ul><li id="%1$s" class="widget %2$s">',
-        'after_widget' => '</li></ul>',
-        'before_title' => '<h3 class="headline headline--small">',
-        'after_title' => '</h3>',
-    ));
+    register_sidebar(
+        array(
+            'name' => __('Footer 1', 'university'),
+            'id' => 'footer-1',
+            'description' => __('Widgets in this area will be shown on all posts and pages.', 'university'),
+            'before_widget' => '<ul><li id="%1$s" class="widget %2$s">',
+            'after_widget' => '</li></ul>',
+            'before_title' => '<h3 class="headline headline--small">',
+            'after_title' => '</h3>',
+        )
+    );
 
-    register_sidebar(array(
-        'name' => __('Footer 2', 'university'),
-        'id' => 'footer-2',
-        'description' => __('Widgets in this area will be shown on all posts and pages.', 'university'),
-        'before_widget' => '<ul><li id="%1$s" class="widget %2$s">',
-        'after_widget' => '</li></ul>',
-        'before_title' => '<h3 class="headline headline--small">',
-        'after_title' => '</h3>',
-    ));
+    register_sidebar(
+        array(
+            'name' => __('Footer 2', 'university'),
+            'id' => 'footer-2',
+            'description' => __('Widgets in this area will be shown on all posts and pages.', 'university'),
+            'before_widget' => '<ul><li id="%1$s" class="widget %2$s">',
+            'after_widget' => '</li></ul>',
+            'before_title' => '<h3 class="headline headline--small">',
+            'after_title' => '</h3>',
+        )
+    );
 
-    register_sidebar(array(
-        'name' => __('Footer 3', 'university'),
-        'id' => 'footer-3',
-        'description' => __('Widgets in this area will be shown on all posts and pages.', 'university'),
-        'before_widget' => '<ul><li id="%1$s" class="widget %2$s">',
-        'after_widget' => '</li></ul>',
-        'before_title' => '<h3 class="headline headline--small">',
-        'after_title' => '</h3>',
-    ));
+    register_sidebar(
+        array(
+            'name' => __('Footer 3', 'university'),
+            'id' => 'footer-3',
+            'description' => __('Widgets in this area will be shown on all posts and pages.', 'university'),
+            'before_widget' => '<ul><li id="%1$s" class="widget %2$s">',
+            'after_widget' => '</li></ul>',
+            'before_title' => '<h3 class="headline headline--small">',
+            'after_title' => '</h3>',
+        )
+    );
 
-    register_sidebar(array(
-        'name' => __('Footer 4', 'university'),
-        'id' => 'footer-4',
-        'description' => __('Widgets in this area will be shown on all posts and pages.', 'university'),
-        'before_widget' => '<ul><li id="%1$s" class="widget %2$s">',
-        'after_widget' => '</li></ul>',
-        'before_title' => '<h3 class="headline headline--small">',
-        'after_title' => '</h3>',
-    ));
+    register_sidebar(
+        array(
+            'name' => __('Footer 4', 'university'),
+            'id' => 'footer-4',
+            'description' => __('Widgets in this area will be shown on all posts and pages.', 'university'),
+            'before_widget' => '<ul><li id="%1$s" class="widget %2$s">',
+            'after_widget' => '</li></ul>',
+            'before_title' => '<h3 class="headline headline--small">',
+            'after_title' => '</h3>',
+        )
+    );
 }
 
 add_action('widgets_init', 'university_footer_sidebar');
@@ -121,23 +131,32 @@ function university_Paginations($pages = '', $range = 2)
 }
 
 // For url based query check to perform custom query
+
 function university_adjust_query($query)
 {
+
+    if(!is_admin() && is_post_type_archive( 'program' ) && $query->is_main_query()){
+        $query->set('orderby', 'title');
+        $query->set('order', 'ASC');
+        $query->set('post_per_page',-1);
+    }
     if (!is_admin() && is_post_type_archive('event') && $query->is_main_query()) {
         $today = date('ymd');
         $query->set('meta_key', 'event_date');
         $query->set('orderby', 'meta_value_num');
         $query->set('order', 'ASC');
-        $query->set('meta_query', array(
-            //'relation' => 'AND',
-            array(
-                'key' => 'event_date',
-                'value' => $today,
-                'compare' => '>',
-                'type' => 'DATE'
+        $query->set(
+            'meta_query', array(
+                //'relation' => 'AND',
+                array(
+                    'key' => 'event_date',
+                    'value' => $today,
+                    'compare' => '>',
+                    'type' => 'DATE'
 
+                )
             )
-        ));
+        );
 
     }
 }
@@ -146,30 +165,31 @@ add_action('pre_get_posts', 'university_adjust_query');
 
 // After theme activate automatically past-event page Created...
 
-function university_page_on_theme_activation(){
+function university_page_on_theme_activation()
+{
 
     // Set the title, template, etc
-    $new_page_title     = __('Past Events','university'); // Page's title
-    $new_page_content   = '';                           // Content goes here
-    $new_page_template  = 'page-past-events.php';       // The template to use for the page
+    $new_page_title = __('Past Events', 'university');
+    // Page's title
+    $new_page_content = '';                           // Content goes here
+    $new_page_template = 'page-past-events.php';       // The template to use for the page
     $page_check = get_page_by_title($new_page_title);   // Check if the page already exists
     // Store the above data in an array
     $new_page = array(
-        'post_type'     => 'page',
-        'post_title'    => $new_page_title,
-        'post_content'  => $new_page_content,
-        'post_status'   => 'publish',
-        'post_author'   => 1,
-        'post_name'     => 'past-events'
+        'post_type' => 'page',
+        'post_title' => $new_page_title,
+        'post_content' => $new_page_content,
+        'post_status' => 'publish',
+        'post_author' => 1,
+        'post_name' => 'past-events'
     );
     // If the page doesn't already exist, create it
-    if(!isset($page_check->ID)){
+    if (!isset($page_check->ID)) {
         $new_page_id = wp_insert_post($new_page);
-        if(!empty($new_page_template)){
+        if (!empty($new_page_template)) {
             update_post_meta($new_page_id, '_wp_page_template', $new_page_template);
         }
     }
 }
 
-add_action( 'after_switch_theme', 'university_page_on_theme_activation' );
-
+add_action('after_switch_theme', 'university_page_on_theme_activation');

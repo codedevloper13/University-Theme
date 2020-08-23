@@ -35,3 +35,7 @@ td.evnt_table_info {
     font-weight: 400;
     /* color: black; */
 }
+ul.programs-lists {
+    list-style: none;
+    display: contents;
+}
